@@ -12,6 +12,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Flight
 {
+
+    public function __toString()
+    {
+        return "De " . $this->departure . " à " . $this->arrival;
+    }
+
     /**
      * @var int
      *
@@ -22,14 +28,12 @@ class Flight
     private $id;
 
     /**
-     * @var string
      * @ORM\ManyToOne(targetEntity="WCS\CoavBundle\Entity\Terrain", inversedBy="departures")
      * @ORM\JoinColumn(nullable=false)
      */
     private $departure;
 
     /**
-     * @var string
      * @ORM\ManyToOne(targetEntity="WCS\CoavBundle\Entity\Terrain", inversedBy="arrivals")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -66,20 +70,17 @@ class Flight
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="text", nullable=true)
+     * @ORM\Column(name="description", type="text")
      */
     private $description;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="pilot", type="string", length=32)
+     * @ORM\OneToOne(targetEntity="WCS\CoavBundle\Entity\User")
      */
     private $pilot;
 
     /**
-     * @ORM\ManyToOne(targetEntity="WCS\CoavBundle\Entity\PlaneModel", inversedBy="planes")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity="WCS\CoavBundle\Entity\PlaneModel", inversedBy="flight")
      */
     private $plane;
 
@@ -89,6 +90,11 @@ class Flight
      * @ORM\Column(name="wasDone", type="boolean")
      */
     private $wasDone;
+
+    /**
+     * @ORM\OneToMany(targetEntity="WCS\CoavBundle\Entity\Reservation",mappedBy="flight")
+     */
+    private $reservations;
 
 
     /**
@@ -339,5 +345,70 @@ class Flight
     public function getWasDone()
     {
         return $this->wasDone;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->plane = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add plane
+     *
+     * @param \WCS\CoavBundle\Entity\PlaneModel $plane
+     *
+     * @return Flight
+     */
+    public function addPlane(\WCS\CoavBundle\Entity\PlaneModel $plane)
+    {
+        $this->plane[] = $plane;
+
+        return $this;
+    }
+
+    /**
+     * Remove plane
+     *
+     * @param \WCS\CoavBundle\Entity\PlaneModel $plane
+     */
+    public function removePlane(\WCS\CoavBundle\Entity\PlaneModel $plane)
+    {
+        $this->plane->removeElement($plane);
+    }
+
+    /**
+     * Add reservation
+     *
+     * @param \WCS\CoavBundle\Entity\Reservation $reservation
+     *
+     * @return Flight
+     */
+    public function addReservation(\WCS\CoavBundle\Entity\Reservation $reservation)
+    {
+        $this->reservations[] = $reservation;
+
+        return $this;
+    }
+
+    /**
+     * Remove reservation
+     *
+     * @param \WCS\CoavBundle\Entity\Reservation $reservation
+     */
+    public function removeReservation(\WCS\CoavBundle\Entity\Reservation $reservation)
+    {
+        $this->reservations->removeElement($reservation);
+    }
+
+    /**
+     * Get reservations
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getReservations()
+    {
+        return $this->reservations;
     }
 }
