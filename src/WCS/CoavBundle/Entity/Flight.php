@@ -75,7 +75,10 @@ class Flight
     private $description;
 
     /**
-     * @ORM\OneToOne(targetEntity="WCS\CoavBundle\Entity\User")
+     * @var int
+     *
+     * @ORM\OneToOne(targetEntity="WCS\CoavBundle\Entity\User", inversedBy="pilots")
+     * @ORM\JoinColumn(name="pilot", referencedColumnName="id")
      */
     private $pilot;
 

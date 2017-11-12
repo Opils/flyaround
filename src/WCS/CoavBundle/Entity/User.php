@@ -121,6 +121,11 @@ class User
     private $author;
 
     /**
+     * @ORM\OneToOne(targetEntity="WCS\CoavBundle\Entity\Flight", mappedBy="pilot")
+     */
+    private $pilots;
+
+    /**
      * Get id
      *
      * @return int
@@ -491,5 +496,29 @@ class User
     public function getAuthor()
     {
         return $this->author;
+    }
+
+    /**
+     * Set pilots
+     *
+     * @param \WCS\CoavBundle\Entity\Flight $pilots
+     *
+     * @return User
+     */
+    public function setPilots(\WCS\CoavBundle\Entity\Flight $pilots = null)
+    {
+        $this->pilots = $pilots;
+
+        return $this;
+    }
+
+    /**
+     * Get pilots
+     *
+     * @return \WCS\CoavBundle\Entity\Flight
+     */
+    public function getPilots()
+    {
+        return $this->pilots;
     }
 }
