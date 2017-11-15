@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Review
 {
+
     /**
      * @var int
      *
@@ -29,12 +30,16 @@ class Review
     private $text;
 
     /**
+     * @var int
+     *
      * @ORM\ManyToOne(targetEntity="WCS\CoavBundle\Entity\User")
      */
     private $userRated;
 
     /**
+     *
      * @ORM\ManyToOne(targetEntity="WCS\CoavBundle\Entity\User", inversedBy="author")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $reviewAuthor;
 
@@ -181,5 +186,46 @@ class Review
     public function getNote()
     {
         return $this->note;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->userreviews = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add userreview
+     *
+     * @param \WCS\CoavBundle\Entity\User $userreview
+     *
+     * @return Review
+     */
+    public function addUserreview(\WCS\CoavBundle\Entity\User $userreview)
+    {
+        $this->userreviews[] = $userreview;
+
+        return $this;
+    }
+
+    /**
+     * Remove userreview
+     *
+     * @param \WCS\CoavBundle\Entity\User $userreview
+     */
+    public function removeUserreview(\WCS\CoavBundle\Entity\User $userreview)
+    {
+        $this->userreviews->removeElement($userreview);
+    }
+
+    /**
+     * Get userreviews
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUserreviews()
+    {
+        return $this->userreviews;
     }
 }

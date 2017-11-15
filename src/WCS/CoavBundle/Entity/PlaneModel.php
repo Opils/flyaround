@@ -12,12 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class PlaneModel
 {
-
-    public function __toString()
-    {
-        return $this->manufacturer . " - " .$this->model;
-    }
-
     /**
      * @var int
      *
@@ -51,9 +45,9 @@ class PlaneModel
     /**
      * @var int
      *
-     * @ORM\Column(name="planeNbSeats", type="smallint")
+     * @ORM\Column(name="planeNBSeats", type="smallint")
      */
-    private $planeNbSeats;
+    private $planeNBSeats;
 
     /**
      * @var bool
@@ -65,8 +59,7 @@ class PlaneModel
     /**
      * @ORM\OneToMany(targetEntity="WCS\CoavBundle\Entity\Flight", mappedBy="plane")
      */
-    private $flight;
-
+    private $planeModels;
 
     /**
      * Get id
@@ -151,27 +144,27 @@ class PlaneModel
     }
 
     /**
-     * Set planeNbSeats
+     * Set planeNBSeats
      *
-     * @param integer $planeNbSeats
+     * @param integer $planeNBSeats
      *
      * @return PlaneModel
      */
-    public function setPlaneNbSeats($planeNbSeats)
+    public function setPlaneNBSeats($planeNBSeats)
     {
-        $this->planeNbSeats = $planeNbSeats;
+        $this->planeNBSeats = $planeNBSeats;
 
         return $this;
     }
 
     /**
-     * Get planeNbSeats
+     * Get planeNBSeats
      *
      * @return int
      */
-    public function getPlaneNbSeats()
+    public function getPlaneNBSeats()
     {
-        return $this->planeNbSeats;
+        return $this->planeNBSeats;
     }
 
     /**
@@ -202,40 +195,40 @@ class PlaneModel
      */
     public function __construct()
     {
-        $this->flight = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->planeModels = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
-     * Add flight
+     * Add planeModel
      *
-     * @param \WCS\CoavBundle\Entity\Flight $flight
+     * @param \WCS\CoavBundle\Entity\Flight $planeModel
      *
      * @return PlaneModel
      */
-    public function addFlight(\WCS\CoavBundle\Entity\Flight $flight)
+    public function addPlaneModel(\WCS\CoavBundle\Entity\Flight $planeModel)
     {
-        $this->flight[] = $flight;
+        $this->planeModels[] = $planeModel;
 
         return $this;
     }
 
     /**
-     * Remove flight
+     * Remove planeModel
      *
-     * @param \WCS\CoavBundle\Entity\Flight $flight
+     * @param \WCS\CoavBundle\Entity\Flight $planeModel
      */
-    public function removeFlight(\WCS\CoavBundle\Entity\Flight $flight)
+    public function removePlaneModel(\WCS\CoavBundle\Entity\Flight $planeModel)
     {
-        $this->flight->removeElement($flight);
+        $this->planeModels->removeElement($planeModel);
     }
 
     /**
-     * Get flight
+     * Get planeModels
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getFlight()
+    public function getPlaneModels()
     {
-        return $this->flight;
+        return $this->planeModels;
     }
 }
