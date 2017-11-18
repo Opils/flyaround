@@ -12,11 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Flight
 {
-    public function __toString()
-    {
-        return $this->departure . " - " . $this->arrival;
-    }
-
     /**
      * @var int
      *
@@ -27,13 +22,16 @@ class Flight
     private $id;
 
     /**
+     * @var string
      * @ORM\ManyToOne(targetEntity="WCS\CoavBundle\Entity\Terrain", inversedBy="departures")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $departure;
 
     /**
-     *
+     * @var string
      * @ORM\ManyToOne(targetEntity="WCS\CoavBundle\Entity\Terrain", inversedBy="arrivals")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $arrival;
 
@@ -47,9 +45,9 @@ class Flight
     /**
      * @var float
      *
-     * @ORM\Column(name="seatsPrice", type="float")
+     * @ORM\Column(name="seatPrice", type="float")
      */
-    private $seatsPrice;
+    private $seatPrice;
 
     /**
      * @var \DateTime
@@ -73,14 +71,16 @@ class Flight
     private $description;
 
     /**
-     * @ORM\OneToOne(targetEntity="WCS\CoavBundle\Entity\User", inversedBy="pilots")
+     * @var string
+     * @ORM\OneToMany(targetEntity="WCS\CoavBundle\Entity\User", mappedBy="pilots")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $pilot;
 
     /**
      * @var string
-     *
-     * @ORM\ManyToOne(targetEntity="WCS\CoavBundle\Entity\PlaneModel", inversedBy="planeModels")
+     * @ORM\ManyToOne(targetEntity="WCS\CoavBundle\Entity\PlaneModel", inversedBy="planes")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $plane;
 
@@ -94,7 +94,8 @@ class Flight
     /**
      * @ORM\OneToMany(targetEntity="WCS\CoavBundle\Entity\Reservation", mappedBy="flight")
      */
-    private $reservations;
+    private $flights;
+
 
     /**
      * Get id
@@ -113,9 +114,9 @@ class Flight
      *
      * @return Flight
      */
-    public function setDeparture($Departure)
+    public function setDeparture($departure)
     {
-        $this->Departure = $Departure;
+        $this->departure = $departure;
 
         return $this;
     }
@@ -179,27 +180,27 @@ class Flight
     }
 
     /**
-     * Set seatsPrice
+     * Set seatPrice
      *
-     * @param float $seatsPrice
+     * @param float $seatPrice
      *
      * @return Flight
      */
-    public function setSeatsPrice($seatsPrice)
+    public function setSeatPrice($seatPrice)
     {
-        $this->seatsPrice = $seatsPrice;
+        $this->seatPrice = $seatPrice;
 
         return $this;
     }
 
     /**
-     * Get seatsPrice
+     * Get seatPrice
      *
      * @return float
      */
-    public function getSeatsPrice()
+    public function getSeatPrice()
     {
-        return $this->seatsPrice;
+        return $this->seatPrice;
     }
 
     /**
@@ -350,49 +351,65 @@ class Flight
      */
     public function __construct()
     {
-        $this->reservations = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pilot = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->flights = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
-     * Add reservation
+     * Add pilot
      *
-     * @param \WCS\CoavBundle\Entity\Reservation $reservation
+     * @param \WCS\CoavBundle\Entity\User $pilot
      *
      * @return Flight
      */
-    public function addReservation(\WCS\CoavBundle\Entity\Reservation $reservation)
+    public function addPilot(\WCS\CoavBundle\Entity\User $pilot)
     {
-        $this->reservations[] = $reservation;
+        $this->pilot[] = $pilot;
 
         return $this;
     }
 
     /**
-     * Remove reservation
+     * Remove pilot
      *
-     * @param \WCS\CoavBundle\Entity\Reservation $reservation
+     * @param \WCS\CoavBundle\Entity\User $pilot
      */
-    public function removeReservation(\WCS\CoavBundle\Entity\Reservation $reservation)
+    public function removePilot(\WCS\CoavBundle\Entity\User $pilot)
     {
-        $this->reservations->removeElement($reservation);
+        $this->pilot->removeElement($pilot);
     }
 
     /**
-     * Get reservations
+     * Add flight
      *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getReservations()
-    {
-        return $this->reservations;
-    }
-
-    /**
-     * Set flightDeparture
-     *
-     * @param \WCS\CoavBundle\Entity\Terrain $flightDeparture
+     * @param \WCS\CoavBundle\Entity\Reservation $flight
      *
      * @return Flight
      */
+    public function addFlight(\WCS\CoavBundle\Entity\Reservation $flight)
+    {
+        $this->flights[] = $flight;
 
+        return $this;
+    }
+
+    /**
+     * Remove flight
+     *
+     * @param \WCS\CoavBundle\Entity\Reservation $flight
+     */
+    public function removeFlight(\WCS\CoavBundle\Entity\Reservation $flight)
+    {
+        $this->flights->removeElement($flight);
+    }
+
+    /**
+     * Get flights
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFlights()
+    {
+        return $this->flights;
+    }
 }

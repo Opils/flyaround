@@ -12,13 +12,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Review
 {
-
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\GeneratedValue(strategy=    "AUTO")
      */
     private $id;
 
@@ -30,16 +29,12 @@ class Review
     private $text;
 
     /**
-     * @var int
-     *
-     * @ORM\ManyToOne(targetEntity="WCS\CoavBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="WCS\CoavBundle\Entity\User", inversedBy="userRateds")
      */
     private $userRated;
 
     /**
-     *
-     * @ORM\ManyToOne(targetEntity="WCS\CoavBundle\Entity\User", inversedBy="author")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity="WCS\CoavBundle\Entity\User", inversedBy="reviewAuthors")
      */
     private $reviewAuthor;
 
@@ -186,46 +181,5 @@ class Review
     public function getNote()
     {
         return $this->note;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->userreviews = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add userreview
-     *
-     * @param \WCS\CoavBundle\Entity\User $userreview
-     *
-     * @return Review
-     */
-    public function addUserreview(\WCS\CoavBundle\Entity\User $userreview)
-    {
-        $this->userreviews[] = $userreview;
-
-        return $this;
-    }
-
-    /**
-     * Remove userreview
-     *
-     * @param \WCS\CoavBundle\Entity\User $userreview
-     */
-    public function removeUserreview(\WCS\CoavBundle\Entity\User $userreview)
-    {
-        $this->userreviews->removeElement($userreview);
-    }
-
-    /**
-     * Get userreviews
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getUserreviews()
-    {
-        return $this->userreviews;
     }
 }
