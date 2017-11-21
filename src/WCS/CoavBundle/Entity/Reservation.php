@@ -42,9 +42,8 @@ class Reservation
     private $passengers;
 
     /**
-     * @var string
-     *
      * @ORM\ManyToOne(targetEntity="WCS\CoavBundle\Entity\Flight", inversedBy="flights")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $flight;
 

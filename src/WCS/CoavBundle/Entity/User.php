@@ -29,8 +29,7 @@ class User
     private $reservations;
 
     /**
-     * @ORM\ManyToOne(targetEntity="WCS\CoavBundle\Entity\Flight", inversedBy="pilot")
-     *
+     * @ORM\OneToMany(targetEntity="WCS\CoavBundle\Entity\Flight", mappedBy="pilot")
      */
     private $pilots;
 
@@ -131,12 +130,6 @@ class User
      * @ORM\OneToMany(targetEntity="WCS\CoavBundle\Entity\Review", mappedBy="reviewAuthor")
      */
     private $reviewAuthors;
-
-    /**
-     * @ORM\OneToMany(targetEntity="WCS\CoavBundle\Entity\Review", mappedBy="userRated")
-     */
-    private $userRateds;
-
 
     /**
      * Get id
@@ -567,5 +560,29 @@ class User
     public function getUserRateds()
     {
         return $this->userRateds;
+    }
+
+    /**
+     * Add pilot
+     *
+     * @param \WCS\CoavBundle\Entity\Flight $pilot
+     *
+     * @return User
+     */
+    public function addPilot(\WCS\CoavBundle\Entity\Flight $pilot)
+    {
+        $this->pilots[] = $pilot;
+
+        return $this;
+    }
+
+    /**
+     * Remove pilot
+     *
+     * @param \WCS\CoavBundle\Entity\Flight $pilot
+     */
+    public function removePilot(\WCS\CoavBundle\Entity\Flight $pilot)
+    {
+        $this->pilots->removeElement($pilot);
     }
 }

@@ -6,23 +6,26 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ReservationType extends AbstractType
+class ReviewType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('nbReservedSeats')->add('publicationDate')->add('wasDone')->add('passengers')->add('flight');
+        $builder->add('departure')
+                ->add('arrival')
+            ->add('nbFreeSeats')
+            ->add('seatPrice')->add('takeOffTime')->add('publicationDate')->add('description')->add('pilot')->add('plane')->add('wasDone');
     }
-    
+
     /**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'WCS\CoavBundle\Entity\Reservation'
+            'data_class' => 'WCS\CoavBundle\Entity\review'
         ));
     }
 
@@ -31,7 +34,7 @@ class ReservationType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'wcs_coavbundle_reservation';
+        return 'wcs_coavbundle_review';
     }
 
 
