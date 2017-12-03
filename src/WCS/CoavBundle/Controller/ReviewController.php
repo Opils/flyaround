@@ -5,14 +5,15 @@ namespace WCS\CoavBundle\Controller;
 use WCS\CoavBundle\Entity\Review;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
+use WCS\CoavBundle\Form\ReviewType;
 
 /**
  * Review controller.
  *
  * @Route("review")
  */
-
 class ReviewController extends Controller
 {
     /**
@@ -42,8 +43,8 @@ class ReviewController extends Controller
 
     public function newAction(Request $request)
     {
-        /*  $review = new Review();
-        $form = $this->createForm('WCS\CoavBundle\Form\ReviewType', $review);
+        $review = new Review();
+        $form = $this->createForm(ReviewType::class, $review);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -53,7 +54,87 @@ class ReviewController extends Controller
 
             return $this->redirectToRoute('review_show', array('id' => $review->getId()));
         }
-        */
-        return $this->render('review/new.html.twig');
+
+        return $this->render('review/new.html.twig', array(
+            'review' => $review,
+            'form' => $form->createView(),
+        ));
+    }
+
+
+    /**
+     * Finds and displays a review entity.
+     *
+     * @Route("/{id}", name="review_show")
+     * @Method("GET")
+     */
+    public function showAction(review $review)
+    {
+        $deleteForm = $this->createDeleteForm($review);
+
+        return $this->render('review/show.html.twig', array(
+            'review' => $review,
+            'delete_form' => $deleteForm->createView(),
+        ));
+    }
+
+    /**
+     * Creates a form to delete a review entity.
+     *
+     * @param review $review The review entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createDeleteForm(review $review)
+    {
+        return $this->createFormBuilder()
+            ->setAction($this->generateUrl('review_delete', array('id' => $review->getId())))
+            ->setMethod('DELETE')
+            ->getForm();
+    }
+
+    /**
+     * Displays a form to edit an existing review entity.
+     *
+     * @Route("/{id}/edit", name="review_edit")
+     * @Method({"GET", "POST"})
+     */
+    public function editAction(Request $request, review $review)
+    {
+        $deleteForm = $this->createDeleteForm($review);
+        $editForm = $this->createForm(ReviewType::class, $review);
+        $editForm->handleRequest($request);
+
+        if ($editForm->isSubmitted() && $editForm->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('review_edit', array('id' => $review->getId()));
+        }
+
+        return $this->render('review/edit.html.twig', array(
+            'review' => $review,
+            'edit_form' => $editForm->createView(),
+            'delete_form' => $deleteForm->createView(),
+        ));
+    }
+
+    /**
+     * Deletes a review entity.
+     *
+     * @Route("/{id}", name="review_delete")
+     * @Method("DELETE")
+     */
+    public function deleteAction(Request $request, review $review)
+    {
+        $form = $this->createDeleteForm($review);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($review);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('review_index');
     }
 }
