@@ -14,8 +14,8 @@
             <td>{{ review.reviewAuthor }}</td>
         </tr>
         <tr>
-            <th>Rated user</th>
-            <td>{{ review.ratedUser }}</td>
+            <th>User Rated Id</th>
+            <td>{{ review.userRated }}</td>
         </tr>
         <tr>
             <th>note</th>
@@ -27,7 +27,7 @@
         </tr>
         <tr>
             <th>Publication date</th>
-            <td>{{ review.publicationDate }}</td>
+            <td>{{ review.publicationDate|date('Y-m-d H:i:s') }}</td>
         </tr>
         </tbody>
     </table>

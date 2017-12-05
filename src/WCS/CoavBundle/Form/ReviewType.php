@@ -24,8 +24,8 @@ class ReviewType extends AbstractType
             ->add('text', TextareaType::class, array('attr' => array('maxlength' => 250, 'label' => 'Description')))
             ->add('publicationDate', DateType::class, array('data' => new \DateTime('now')))
             ->add('note', IntegerType::class, array ('attr' => array('min' => 0, 'max' => 5, 'label' => 'Note')))
-            ->add('userRated', CheckboxType::class, array('mapped' => false))
-            ->add('reviewAuthor', EntityType::class, array(
+            ->add('agreeTerms', CheckboxType::class, array('mapped' => false))
+            ->add('userRated', EntityType::class, array(
                 'class' => 'WCS\CoavBundle\Entity\User',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')
